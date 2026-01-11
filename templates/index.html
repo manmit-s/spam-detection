@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spam Sentinel | AI-Powered Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <meta name="description"
+        content="State-of-the-art AI spam detection tool. Enter your text to analyze for spam content instantly.">
+    <style>
+        /* Fallback to ensure no flash of unstyled content if possible */
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Spam Sentinel</h1>
+        <p class="subtitle">Enter your message below to check if it's spam or ham.</p>
+
+        <form action="/predict" method="POST">
+            <div class="input-group">
+                <label for="message">Message Content</label>
+                <textarea name="message" id="message" placeholder="Paste the message content here..."
+                    required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submit-button">
+                <span>Analyze Message</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </form>
+
+        {% if prediction %}
+        <div class="result-container show" id="result-display">
+            <h2 class="{{ 'result-ham' if prediction == 'Ham' else 'result-spam' }}">
+                Result: {{ prediction }}
+            </h2>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+
+</html>

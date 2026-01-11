@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spam Sentinel | Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Analysis Result</h1>
+
+        {% if context %}
+        <div class="result-container show" id="result-display">
+            <p class="subtitle">AI Model Classification:</p>
+            <h2 class="{{ 'result-ham' if prediction == 0 else 'result-spam' }}">
+                {{ 'NOT SPAM (HAM)' if prediction == 0 else 'SPAM DETECTED' }}
+            </h2>
+            <div style="margin-top: 30px;">
+                <a href="/" class="submit-btn" style="text-decoration: none;">
+                    <span>Analyze Another</span>
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <p class="subtitle">No prediction context provided. Please submit a message from the home page.</p>
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="/" class="submit-btn" style="text-decoration: none;">
+                <span>Go to Home</span>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+
+</html>
