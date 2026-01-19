@@ -94,6 +94,29 @@ You can trigger the training pipeline via the web URL:
 *   Enter an SMS message.
 *   Click **Predict** to see if it's Spam or Ham.
 
+## 🐳 Docker Support
+
+You can also run the application using Docker to ensure a consistent environment.
+
+### Using Docker Compose (Recommended)
+1.  Ensure you have Docker and Docker Compose installed.
+2.  Make sure your `.env` file is created with `MONGO_DB_URL`.
+3.  Run the application:
+    ```bash
+    docker-compose up --build
+    ```
+4.  Access the app at `http://localhost:8080`.
+
+### Manual Docker Build
+1.  **Build the image:**
+    ```bash
+    docker build -t spam-detection-app .
+    ```
+2.  **Run the container:**
+    ```bash
+    docker run -p 8080:8080 --env-file .env -v $(pwd)/logs:/app/logs -v $(pwd)/artifacts:/app/artifacts spam-detection-app
+    ```
+
 ## 📊 Pipeline Details
 
 ### Data Ingestion
