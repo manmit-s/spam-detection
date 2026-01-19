@@ -3,6 +3,10 @@
 ## Overview
 This project is an end-to-end Machine Learning solution designed to classify messages as either **Spam** (unwanted) or **Ham** (legitimate). Built with a production-ready MLOps mindset, it features a complete pipeline from data ingestion to deployment, using **MongoDB** for data storage and **FastAPI** for serving predictions.
 
+## 📖 Detailed Report
+For a comprehensive architectural breakdown, data pipeline analysis, and technical implementation details, developers are encouraged to read the **[Full Project Report](report.md)**.
+
+
 ## 🌟 Key Features
 *   **End-to-End Pipeline:** Modular components for Data Ingestion, Validation, Transformation, Model Training, and Evaluation.
 *   **Neuro-MF Integration:** Utilizes a custom Model Factory (`neuro_mf`) configuration for automated model selection and hyperparameter tuning.
@@ -38,6 +42,7 @@ This project is an end-to-end Machine Learning solution designed to classify mes
 ├── Dockerfile              # Docker build instructions
 ├── docker-compose.yml      # Docker orchestration
 ├── upload_data_mongodb.py  # Script to upload raw CSV to MongoDB
+├── report.md               # Technical breakdown & architectural report
 └── requirements.txt        # Python dependencies
 ```
 
