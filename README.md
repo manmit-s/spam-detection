@@ -10,6 +10,7 @@ This project is an end-to-end Machine Learning solution designed to classify mes
 *   **Experiment Tracking:** Detailed logging and artifact management for every run.
 *   **FastAPI Deployment:** A high-performance web API provides a user-friendly interface for real-time predictions.
 *   **Imbalance Handling:** Built-in strategies (SMOTE) to handle class imbalance in SMS data.
+*   **🐳 Dockerized:** Fully containerized for consistent deployment across any environment.
 
 ## 🛠️ Tech Stack
 <div align="center">
@@ -34,6 +35,8 @@ This project is an end-to-end Machine Learning solution designed to classify mes
 ├── notebooks/              # EDA and experiment sandboxes
 ├── templates/              # HTML frontend for the web app
 ├── app.py                  # FastAPI entry point
+├── Dockerfile              # Docker build instructions
+├── docker-compose.yml      # Docker orchestration
 ├── upload_data_mongodb.py  # Script to upload raw CSV to MongoDB
 └── requirements.txt        # Python dependencies
 ```
@@ -41,10 +44,11 @@ This project is an end-to-end Machine Learning solution designed to classify mes
 ## 🚀 Getting Started
 
 ### Prerequisites
-*   Python 3.8+
+*   Docker & Docker Compose (Recommended) **OR** Python 3.8+
 *   MongoDB (Atlas or Local)
 
-### Installation
+### 🐳 Run with Docker (Recommended)
+This is the fastest way to get the project running without worrying about dependencies.
 
 1.  **Clone the repository:**
     ```bash
@@ -52,87 +56,67 @@ This project is an end-to-end Machine Learning solution designed to classify mes
     cd spam-detection
     ```
 
-2.  **Create and activate a virtual environment:**
+2.  **Set up Environment Variables:**
+    Create a `.env` file in the root directory:
+    ```env
+    MONGO_DB_URL="your_mongodb_connection_string"
+    ```
+
+3.  **Launch the Application:**
+    ```bash
+    docker-compose up --build
+    ```
+    Access the application at: `http://localhost:8080`
+
+---
+
+### 🐍 Run Locally (Manual Setup)
+
+1.  **Create and activate a virtual environment:**
     ```bash
     python -m venv venv
     source venv/bin/activate  # On Windows: venv\Scripts\activate
     ```
 
-3.  **Install dependencies:**
+2.  **Install dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
 
-4.  **Set up Environment Variables:**
-    Create a `.env` file in the root directory and add your MongoDB connection string:
-    ```env
-    MONGO_DB_URL="your_mongodb_connection_string"
+3.  **Start the FastAPI server:**
+    ```bash
+    python app.py
     ```
 
-### 💡 Usage
+---
 
-#### 1. Upload Data to Database
-Before training, populate your MongoDB instance with the seed data:
+## 💡 Usage
+
+#### 1. Populate Database
+Before first-time training, upload the seed data to your MongoDB:
 ```bash
+# If using Docker:
+docker exec -it spam-detection-app python upload_data_mongodb.py
+
+# If running locally:
 python upload_data_mongodb.py
 ```
 
-#### 2. Run the Web Application
-Start the FastAPI server:
-```bash
-python app.py
-```
-Access the application at: `http://localhost:8080`
-
-#### 3. Train the Model
-You can trigger the training pipeline via the web URL:
+#### 2. Train the Model
+Trigger the training pipeline via URL:
 *   Visit `http://localhost:8080/train` to start the training process.
-*   Monitor progress in the logs.
+*   Monitor progress in the logs or terminal.
 
-#### 4. Make Predictions
-*   Go to the home page (`/`).
-*   Enter an SMS message.
-*   Click **Predict** to see if it's Spam or Ham.
+#### 3. Make Predictions
+*   Go to the home page (`http://localhost:8080`).
+*   Enter an SMS message and click **Predict**.
 
-## 🐳 Docker Support
+## ☁️ Deployment
 
-You can also run the application using Docker to ensure a consistent environment.
-
-### Using Docker Compose (Recommended)
-1.  Ensure you have Docker and Docker Compose installed.
-2.  Make sure your `.env` file is created with `MONGO_DB_URL`.
-3.  Run the application:
-    ```bash
-    docker-compose up --build
-    ```
-4.  Access the app at `http://localhost:8080`.
-
-### Manual Docker Build
-1.  **Build the image:**
-    ```bash
-    docker build -t spam-detection-app .
-    ```
-2.  **Run the container:**
-    ```bash
-    docker run -p 8080:8080 --env-file .env -v $(pwd)/logs:/app/logs -v $(pwd)/artifacts:/app/artifacts spam-detection-app
-    ```
-
-## 📊 Pipeline Details
-
-### Data Ingestion
-*   Connects to MongoDB.
-*   Splits data into Train (80%) and Test (20%) sets.
-*   Saves raw data artifacts.
-
-### Data Transformation
-*   **Cleaning:** Regex filtering, lowercasing.
-*   **NLP:** Stopword removal, Porter Stemming.
-*   **Vectorization:** CountVectorizer/TfidfVectorizer.
-
-### Model Training
-*   Uses `ModelFactory` to iterate through configured algorithms.
-*   Selects the best model based on accuracy score.
-*   Saves the model only if it beats the defined threshold.
+Since this project is dockerized, you can deploy it to any cloud provider (AWS, Azure, GCP) by:
+1.  Building the image: `docker build -t spam-detection-app .`
+2.  Pushing to a Container Registry (e.g., Docker Hub).
+3.  Running it on services like Azure App Service, AWS App Runner, or ECS.
 
 ---
 *Developed by Manmit Samal*
